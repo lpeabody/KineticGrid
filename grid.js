@@ -102,12 +102,15 @@ window.onload = function(event) {
   }
   
   randomIndex = Math.floor(Math.random() * layer.getChildren().length);
-  // alert(randomIndex);
   randomComposite = layer.getChildren()[randomIndex];
   randomComposite.moveToTop();
-  randomComposite.setScale(4,4);
-  randomComposite.setAttrs({
-    fill: 'red'
+  randomComposite.transitionTo({
+    x: randomComposite.getPosition().x - (randomComposite.getWidth() / 2),
+    y: randomComposite.getPosition().y - (randomComposite.getHeight() / 2),
+    scale: {x: 2, y: 2},
+    duration: 1,
+    opacity: 1,
+    easing: 'ease-out'
   });
 
   // layer.add(rect);
