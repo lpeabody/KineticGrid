@@ -100,19 +100,73 @@ window.onload = function(event) {
       }
     }
   }
-  
-  randomIndex = Math.floor(Math.random() * layer.getChildren().length);
-  randomComposite = layer.getChildren()[randomIndex];
-  randomComposite.moveToTop();
-  randomComposite.transitionTo({
-    x: randomComposite.getPosition().x - (randomComposite.getWidth() / 2),
-    y: randomComposite.getPosition().y - (randomComposite.getHeight() / 2),
-    scale: {x: 2, y: 2},
-    duration: 1,
-    opacity: 1,
-    easing: 'ease-out'
-  });
+
+  // ensure we have different random indexes
+  do {
+    var randomIndex1 = Math.floor(Math.random() * layer.getChildren().length);
+    var randomIndex2 = Math.floor(Math.random() * layer.getChildren().length);
+    var randomComposite1 = layer.getChildren()[randomIndex1];
+    var randomComposite2 = layer.getChildren()[randomIndex2];
+  } while (randomComposite1.getWidth() !== randomComposite2.getWidth());
+
+  // move the objects to the top
+  randomComposite1.moveToTop();
+  randomComposite2.moveToTop();
+
+  var rc1Position = randomComposite1.getPosition();
+  var rc2Position = randomComposite2.getPosition();
+
+  // randomComposite1.transitionTo({
+  //   x: rc2Position.x,
+  //   y: rc2Position.y,
+  //   easing: 'ease-out',
+  //   duration: 3
+  // });
+
+  // randomComposite2.transitionTo({
+  //   x: rc1Position.x,
+  //   y: rc1Position.y,
+  //   easing: 'ease-out',
+  //   duration: 3
+  // });
+
+  // randomComposite1.transitionTo({
+  //   x: randomComposite1.getPosition().x - (randomComposite1.getWidth() / 2),
+  //   y: randomComposite1.getPosition().y - (randomComposite1.getHeight() / 2),
+  //   scale: {x: 2, y: 2},
+  //   duration: 1,
+  //   opacity: 1,
+  //   easing: 'ease-out'
+  // });
 
   // layer.add(rect);
   stage.add(layer);
+  period = 3000;
+
+  /**
+   * scale out = 1 second, ease-out
+   * swap positions = 1 second, ease-out
+   * scale in (land) = 0.5 seconds, linear
+   *
+   * keyframes
+   * ---------
+   * at t = 0, surface is flat
+   * at t = 1000, objects are scaled out (length, 1000)
+   * pause 2 seconds
+   * at t = 3000, objects are swapped (length, 1000)
+   * pause 2 seconds
+   * at t = 5500, objects are landed (scaled in ) (length, 500)
+   */
+  var anim = new Kinetic.Animation({
+    func: function(frame) {
+      var x = rc2Position.x * Math.abs(2*((frame.time/period)-(Math.floor((frame.time/period)+(1/2)))));
+      randomComposite1.setPosition({
+        x: x,
+        y: rc1Position.y
+      });
+    },
+    node: layer
+  });
+
+  anim.start();
 };
