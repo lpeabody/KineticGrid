@@ -1,4 +1,13 @@
 /**
+ * Cubic Bezier Equation
+ * Source: http://en.wikipedia.org/wiki/B%C3%A9zier_curve#Animation
+ */
+
+function cubicBezier(p0,p1,p2,p3,t) {
+  return (Math.pow(1-t,3) * p0) + (3 * Math.pow(1-t,2)*t*p1) + (3 * (1-t) * Math.pow(t,2) * p2) + (Math.pow(t,3) * p3);
+}
+
+/**
 * Function creates and places the composite block object.
 */
 function placeBlock(array, size, blockSize, anchorY, anchorX) {
